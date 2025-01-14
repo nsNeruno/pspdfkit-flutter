@@ -1888,7 +1888,14 @@ class PspdfkitWidgetControllerApiSetup {
         if let api = api {
             canUndoChannel.setMessageHandler { message, reply in
                 api.canUndo { res in
-                    reply(wrapResult(res))
+                    switch res {
+                    case .success(let res):
+                        reply(wrapResult(res))
+                        break
+                    case .failure(let err):
+                        reply(wrapResult(false))
+                        break
+                    }
                 }
             }
         } else {
@@ -1899,7 +1906,14 @@ class PspdfkitWidgetControllerApiSetup {
         if let api = api {
             undoChannel.setMessageHandler { message, reply in
                 api.undo { res in
-                    reply(wrapResult(res))
+                    switch res {
+                    case .success(let res):
+                        reply(wrapResult(res))
+                        break
+                    case .failure(let err):
+                        reply(wrapResult(false))
+                        break
+                    }
                 }
             }
         } else {
@@ -1910,7 +1924,14 @@ class PspdfkitWidgetControllerApiSetup {
         if let api = api {
             canRedoChannel.setMessageHandler { message, reply in
                 api.canRedo { res in
-                    reply(wrapResult(res))
+                    switch res {
+                    case .success(let res):
+                        reply(wrapResult(res))
+                        break
+                    case .failure(let err):
+                        reply(wrapResult(false))
+                        break
+                    }
                 }
             }
         } else {
@@ -1921,7 +1942,14 @@ class PspdfkitWidgetControllerApiSetup {
         if let api = api {
             redoChannel.setMessageHandler { message, reply in
                 api.redo { res in
-                    reply(wrapResult(res))
+                    switch res {
+                    case .success(let res):
+                        reply(wrapResult(res))
+                        break
+                    case .failure(let err):
+                        reply(wrapResult(false))
+                        break
+                    }
                 }
             }
         } else {
@@ -1932,7 +1960,14 @@ class PspdfkitWidgetControllerApiSetup {
         if let api = api {
             getAnnotationStateChannel.setMessageHandler { message, reply in
                 api.getAnnotationState(completion: { res in
-                    reply(wrapResult(res))
+                    switch res {
+                    case .success(let res):
+                        reply(wrapResult(res))
+                        break
+                    case .failure(let err):
+                        reply(wrapResult(nil))
+                        break
+                    }
                 })
             }
         } else {
