@@ -100,4 +100,34 @@ abstract class PspdfkitWidgetController {
   /// pageIndex The index of the page. This is a zero-based index.
   /// Returns a [Future] that completes with the zoom scale of the given page.
   Future<double> getZoomScale(int pageIndex);
+
+  // BEGIN: Custom methods
+  Future<bool> canUndo() => throw UnimplementedError();
+
+  Future<void> undo() => throw UnimplementedError();
+
+  Future<bool> canRedo() => throw UnimplementedError();
+
+  Future<void> redo() => throw UnimplementedError();
+
+  Future<Map<dynamic, dynamic>?> getAnnotationState() => throw UnimplementedError();
+
+  Future<void> toggleInkAnnotation() => throw UnimplementedError();
+
+  Future<void> toggleInkHighlightAnnotation() => throw UnimplementedError();
+
+  Future<void> toggleLineAnnotation() => throw UnimplementedError();
+
+  Future<void> toggleArrowAnnotation() => throw UnimplementedError();
+
+  Future<void> toggleSquareAnnotation() => throw UnimplementedError();
+
+  Future<void> toggleCircleAnnotation() => throw UnimplementedError();
+
+  Future<void> toggleCloudAnnotation() => throw UnimplementedError();
+
+  Future<void> toggleCalloutAnnotation() => throw UnimplementedError();
+
+  Future<void> toggleFreeTextAnnotation() => throw UnimplementedError();
+  // END: Custom methods
 }

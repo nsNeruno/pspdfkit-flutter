@@ -17,7 +17,70 @@
 @implementation PspdfkitFlutterHelper
 
 + (void)processMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result forViewController:(PSPDFViewController *)pdfViewController {
-    if ([@"save" isEqualToString:call.method]) {
+    // BEGIN: New custom methods
+    if ([@"canUndo" isEqualToString:call.method]) {
+        result(@([pdfViewController.undoManager canUndo]));
+    } else if ([@"undo" isEqualToString:call.method]) {
+        NSUndoManager* um = pdfViewController.undoManager;
+        if (um.canUndo) {
+            [um undo];
+        }
+        result(Nil);
+    } else if ([@"canRedo" isEqualToString:call.method]) {
+        result(@([pdfViewController.undoManager canRedo]));
+    } else if ([@"redo" isEqualToString:call.method]) {
+        NSUndoManager* um = pdfViewController.undoManager;
+        if (um.canRedo) {
+            [um redo];
+        }
+        result(nil);
+    } else if ([@"getAnnotationState" isEqualToString:call.method]) {
+        PSPDFAnnotationStateManager* m = pdfViewController.annotationStateManager;
+        
+        NSDictionary* states = @{
+            @"state": m.state,
+            @"variant": m.variant
+        };
+        result(states);
+    } else if ([@"toggleInkAnnotation" isEqualToString:call.method]) {
+        PSPDFAnnotationStateManager* m = pdfViewController.annotationStateManager;
+        [m toggleState:PSPDFAnnotationStringInk];
+        result(nil);
+    } else if ([@"toggleInkHighlightAnnotation" isEqualToString:call.method]) {
+        PSPDFAnnotationStateManager* m = pdfViewController.annotationStateManager;
+        [m toggleState:PSPDFAnnotationStringInk variant:PSPDFAnnotationVariantStringInkHighlighter];
+        result(nil);
+    } else if ([@"toggleLineAnnotation" isEqualToString:call.method]) {
+        PSPDFAnnotationStateManager* m = pdfViewController.annotationStateManager;
+        [m toggleState:PSPDFAnnotationStringLine];
+        result(nil);
+    } else if ([@"toggleArrowAnnotation" isEqualToString:call.method]) {
+        PSPDFAnnotationStateManager* m = pdfViewController.annotationStateManager;
+        [m toggleState:PSPDFAnnotationStringLine variant:PSPDFAnnotationVariantStringLineArrow];
+        result(nil);
+    } else if ([@"toggleSquareAnnotation" isEqualToString:call.method]) {
+        PSPDFAnnotationStateManager* m = pdfViewController.annotationStateManager;
+        [m toggleState:PSPDFAnnotationStringSquare];
+        result(nil);
+    } else if ([@"toggleCircleAnnotation" isEqualToString:call.method]) {
+        PSPDFAnnotationStateManager* m = pdfViewController.annotationStateManager;
+        [m toggleState:PSPDFAnnotationStringCircle];
+        result(nil);
+    } else if ([@"toggleCloudAnnotation" isEqualToString:call.method]) {
+        PSPDFAnnotationStateManager* m = pdfViewController.annotationStateManager;
+        [m toggleState:PSPDFAnnotationStringPolygon variant:PSPDFAnnotationVariantStringPolygonCloud];
+        result(nil);
+    } else if ([@"toggleCalloutAnnotation" isEqualToString:call.method]) {
+        PSPDFAnnotationStateManager* m = pdfViewController.annotationStateManager;
+        [m toggleState:PSPDFAnnotationStringFreeText variant:PSPDFAnnotationVariantStringFreeTextCallout];
+        result(nil);
+    } else if ([@"toggleFreeTextAnnotation" isEqualToString:call.method]) {
+        PSPDFAnnotationStateManager* m = pdfViewController.annotationStateManager;
+        [m toggleState:PSPDFAnnotationStringFreeText];
+        result(nil);
+    }
+    // END: New custom methods
+    else if ([@"save" isEqualToString:call.method]) {
         PSPDFDocument *document = pdfViewController.document;
         if (!document || !document.isValid) {
             result([FlutterError errorWithCode:@"" message:@"PDF document not found or is invalid." details:nil]);

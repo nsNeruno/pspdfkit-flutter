@@ -123,7 +123,7 @@
             [weakSelf handleMethodCall:call result:result];
         }];
     }
-
+    
     return self;
 }
 

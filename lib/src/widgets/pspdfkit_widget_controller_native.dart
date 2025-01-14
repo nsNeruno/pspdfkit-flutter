@@ -179,4 +179,74 @@ class PspdfkitWidgetControllerNative extends PspdfkitWidgetController {
       throw Exception('Error getting zoom scale: $error');
     });
   }
+
+  @override
+  Future<bool> canUndo() async {
+    return _channel.invokeMethod('canUndo',).then((_) => _ == true,);
+  }
+
+  @override
+  Future<void> undo() async {
+    await _channel.invokeMethod('undo',);
+  }
+
+  @override
+  Future<bool> canRedo() async {
+    return _channel.invokeMethod('canRedo',).then((_) => _ == true,);
+  }
+
+  @override
+  Future<void> redo() async {
+    await _channel.invokeMethod('undo',);
+  }
+
+  @override
+  Future<Map<dynamic, dynamic>?> getAnnotationState() async {
+    return _channel.invokeMapMethod('getAnnotationState',);
+  }
+
+  @override
+  Future<void> toggleInkAnnotation() async {
+    await _channel.invokeMethod('toggleInkAnnotation',);
+  }
+
+  @override
+  Future<void> toggleInkHighlightAnnotation() async {
+    await _channel.invokeMethod('toggleInkHighlightAnnotation',);
+  }
+
+  @override
+  Future<void> toggleLineAnnotation() async {
+    await _channel.invokeMethod('toggleLineAnnotation',);
+  }
+
+  @override
+  Future<void> toggleArrowAnnotation() async {
+    await _channel.invokeMethod('toggleArrowAnnotation',);
+  }
+
+  @override
+  Future<void> toggleSquareAnnotation() async {
+    await _channel.invokeMethod('toggleSquareAnnotation',);
+  }
+
+  @override
+  Future<void> toggleCircleAnnotation() async {
+    await _channel.invokeMethod('toggleCircleAnnotation',);
+  }
+
+  @override
+  Future<void> toggleCloudAnnotation() async {
+    await _channel.invokeMethod('toggleCloudAnnotation',);
+  }
+
+  @override
+  Future<void> toggleCalloutAnnotation() async {
+    await _channel.invokeMethod('toggleCalloutAnnotation',);
+  }
+
+  @override
+  Future<void> toggleFreeTextAnnotation() async {
+    await _channel.invokeMethod('toggleFreeTextAnnotation',);
+  }
 }

@@ -172,4 +172,88 @@ class PspdfkitFlutterWidgetControllerImpl
   void onDocumentSaved(String documentId, String? path) {
     onPdfDocumentSaved?.call(documentId, path);
   }
+
+  @override
+  Future<bool> canRedo() {
+    // TODO: implement canRedo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> canUndo() {
+    // TODO: implement canUndo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Map?> getAnnotationState() {
+    // TODO: implement getAnnotationState
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> redo() {
+    // TODO: implement redo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> toggleArrowAnnotation() {
+    // TODO: implement toggleArrowAnnotation
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> toggleCalloutAnnotation() {
+    // TODO: implement toggleCalloutAnnotation
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> toggleCircleAnnotation() {
+    // TODO: implement toggleCircleAnnotation
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> toggleCloudAnnotation() {
+    // TODO: implement toggleCloudAnnotation
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> toggleFreeTextAnnotation() {
+    // TODO: implement toggleFreeTextAnnotation
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> toggleInkAnnotation() {
+    // TODO: implement toggleInkAnnotation
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> toggleInkHighlightAnnotation() {
+    // TODO: implement toggleInkHighlightAnnotation
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> toggleLineAnnotation() {
+    // TODO: implement toggleLineAnnotation
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> toggleSquareAnnotation() {
+    // TODO: implement toggleSquareAnnotation
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> undo() {
+    // TODO: implement undo
+    throw UnimplementedError();
+  }
 }
