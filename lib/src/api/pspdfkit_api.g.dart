@@ -2096,6 +2096,103 @@ class PspdfkitWidgetControllerApi {
       return;
     }
   }
+
+  Future<bool> canUndo() async {
+    final channel = _provideChannel('canUndo',);
+    final replies = await channel.send(null,);
+    return _unwrapReplies(channel.name, replies, (_) => _ == true,);
+  }
+
+  Future<bool> undo() async {
+    final channel = _provideChannel('undo',);
+    final replies = await channel.send(null,);
+    return _unwrapReplies(channel.name, replies, (_) => _ == true,);
+  }
+
+  Future<bool> redo() async {
+    final channel = _provideChannel('redo',);
+    final replies = await channel.send(null,);
+    return _unwrapReplies(channel.name, replies, (_) => _ == true,);
+  }
+
+  Future<bool> canRedo() async {
+    final channel = _provideChannel('canRedo',);
+    final replies = await channel.send(null,);
+    return _unwrapReplies(channel.name, replies, (_) => _ == true,);
+  }
+
+  Future<Map<dynamic, dynamic>?> getAnnotationState() async {
+    final channel = _provideChannel('getAnnotationState',);
+    final replies = await channel.send(null,);
+    return _unwrapReplies(
+      channel.name,
+      replies,
+      (_) {
+        if (_ is Map) {
+          return Map.of(_,);
+        }
+        return null;
+      },
+    );
+  }
+
+  Future<void> toggleInkAnnotation() async {
+    await _provideChannel('toggleInkAnnotation',).send(null,);
+  }
+
+  Future<void> toggleInkHighlightAnnotation() async {
+    await _provideChannel('toggleInkHighlightAnnotation',).send(null,);
+  }
+
+  Future<void> toggleLineAnnotation() async {
+    await _provideChannel('toggleLineAnnotation',).send(null,);
+  }
+
+  Future<void> toggleArrowAnnotation() async {
+    await _provideChannel('toggleArrowAnnotation',).send(null,);
+  }
+
+  Future<void> toggleSquareAnnotation() async {
+    await _provideChannel('toggleSquareAnnotation',).send(null,);
+  }
+
+  Future<void> toggleCircleAnnotation() async {
+    await _provideChannel('toggleCircleAnnotation',).send(null,);
+  }
+
+  Future<void> toggleCloudAnnotation() async {
+    await _provideChannel('toggleCloudAnnotation',).send(null,);
+  }
+
+  Future<void> toggleCalloutAnnotation() async {
+    await _provideChannel('toggleCalloutAnnotation',).send(null,);
+  }
+
+  Future<void> toggleFreeTextAnnotation() async {
+    await _provideChannel('toggleFreeTextAnnotation',).send(null,);
+  }
+
+  String _pigeonChannelName(String method,) => 'dev.flutter.pigeon.pspdfkit_flutter.PspdfkitWidgetControllerApi.$method$pigeonVar_messageChannelSuffix';
+
+  BasicMessageChannel<Object?> _provideChannel<T>(String method,) => BasicMessageChannel(
+    _pigeonChannelName(method,),
+    pigeonChannelCodec,
+    binaryMessenger: pigeonVar_binaryMessenger,
+  );
+
+  T _unwrapReplies<T>(String channelName, dynamic replies, T Function(dynamic reply,) converter,) {
+    if (replies is List && replies.isNotEmpty) {
+      if (replies.length > 1) {
+        throw PlatformException(
+          code: '${replies[0]}',
+          message: '${replies[1]}',
+          details: replies.length >= 2 ? replies[2]?.toString() : null,
+        );
+      }
+      return converter(replies[0],);
+    }
+    throw _createConnectionError(channelName,);
+  }
 }
 
 class PdfDocumentApi {

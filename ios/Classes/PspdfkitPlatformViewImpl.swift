@@ -275,6 +275,46 @@ public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PD
         eventsHelper?.removeEventListener(event: event)
     }
     
+    // MARK: Custom Methods
+    func canUndo(completion: @escaping (Result<Bool, any Error>) -> Void) {
+        if let um = pdfViewController?.undoManager {
+            completion(.success(um.canUndo))
+            return
+        }
+        completion(.success(false))
+    }
+    
+    func undo(completion: @escaping (Result<Bool, any Error>) -> Void) {
+        if let um = pdfViewController?.undoManager {
+            if um.canUndo {
+                um.undo()
+            }
+            completion(.success(um.canUndo))
+            return
+        }
+        completion(.success(false))
+    }
+    
+    func canRedo(completion: @escaping (Result<Bool, any Error>) -> Void) {
+        if let um = pdfViewController?.undoManager {
+            completion(.success(um.canRedo))
+            return
+        }
+        completion(.success(false))
+    }
+    
+    func redo(completion: @escaping (Result<Bool, any Error>) -> Void) {
+        if let um = pdfViewController?.undoManager {
+            if um.canRedo {
+                um.redo()
+            }
+            completion(.success(um.canRedo))
+            return
+        }
+        completion(.success(false))
+    }
+    // MARK: End Custom Methods
+    
     @objc public func register( binaryMessenger: FlutterBinaryMessenger, viewId: String){
         self.viewId = viewId
         pspdfkitWidgetCallbacks = PspdfkitWidgetCallbacks(binaryMessenger: binaryMessenger, messageChannelSuffix: "widget.callbacks.\(viewId)")

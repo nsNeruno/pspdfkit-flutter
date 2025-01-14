@@ -185,6 +185,7 @@ class PspdfkitWidgetControllerNative extends PspdfkitWidgetController {
     return _channel.invokeMethod('canUndo',).then((_) => _ == true,);
   }
 
+  // BEGIN: Custom Methods
   @override
   Future<void> undo() async {
     await _channel.invokeMethod('undo',);
@@ -249,4 +250,5 @@ class PspdfkitWidgetControllerNative extends PspdfkitWidgetController {
   Future<void> toggleFreeTextAnnotation() async {
     await _channel.invokeMethod('toggleFreeTextAnnotation',);
   }
+  // END: Custom Methods
 }

@@ -175,85 +175,71 @@ class PspdfkitFlutterWidgetControllerImpl
 
   @override
   Future<bool> canRedo() {
-    // TODO: implement canRedo
-    throw UnimplementedError();
+    return _pspdfkitWidgetControllerApi.canRedo();
   }
 
   @override
   Future<bool> canUndo() {
-    // TODO: implement canUndo
-    throw UnimplementedError();
+    return _pspdfkitWidgetControllerApi.canUndo();
   }
 
   @override
   Future<Map?> getAnnotationState() {
-    // TODO: implement getAnnotationState
-    throw UnimplementedError();
+    return _pspdfkitWidgetControllerApi.getAnnotationState();
   }
 
   @override
-  Future<void> redo() {
-    // TODO: implement redo
-    throw UnimplementedError();
+  Future<void> redo() async {
+    await _pspdfkitWidgetControllerApi.redo();
   }
 
   @override
-  Future<void> toggleArrowAnnotation() {
-    // TODO: implement toggleArrowAnnotation
-    throw UnimplementedError();
+  Future<void> toggleArrowAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleArrowAnnotation();
   }
 
   @override
-  Future<void> toggleCalloutAnnotation() {
-    // TODO: implement toggleCalloutAnnotation
-    throw UnimplementedError();
+  Future<void> toggleCalloutAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleCalloutAnnotation();
   }
 
   @override
-  Future<void> toggleCircleAnnotation() {
-    // TODO: implement toggleCircleAnnotation
-    throw UnimplementedError();
+  Future<void> toggleCircleAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleCircleAnnotation();
   }
 
   @override
-  Future<void> toggleCloudAnnotation() {
-    // TODO: implement toggleCloudAnnotation
-    throw UnimplementedError();
+  Future<void> toggleCloudAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleCloudAnnotation();
   }
 
   @override
-  Future<void> toggleFreeTextAnnotation() {
-    // TODO: implement toggleFreeTextAnnotation
-    throw UnimplementedError();
+  Future<void> toggleFreeTextAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleFreeTextAnnotation();
   }
 
   @override
-  Future<void> toggleInkAnnotation() {
-    // TODO: implement toggleInkAnnotation
-    throw UnimplementedError();
+  Future<void> toggleInkAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleInkAnnotation();
   }
 
   @override
-  Future<void> toggleInkHighlightAnnotation() {
-    // TODO: implement toggleInkHighlightAnnotation
-    throw UnimplementedError();
+  Future<void> toggleInkHighlightAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleInkHighlightAnnotation();
   }
 
   @override
-  Future<void> toggleLineAnnotation() {
-    // TODO: implement toggleLineAnnotation
-    throw UnimplementedError();
+  Future<void> toggleLineAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleLineAnnotation();
   }
 
   @override
-  Future<void> toggleSquareAnnotation() {
-    // TODO: implement toggleSquareAnnotation
-    throw UnimplementedError();
+  Future<void> toggleSquareAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleSquareAnnotation();
   }
 
   @override
-  Future<void> undo() {
-    // TODO: implement undo
-    throw UnimplementedError();
+  Future<void> undo() async {
+    await _pspdfkitWidgetControllerApi.undo();
   }
 }
