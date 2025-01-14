@@ -574,7 +574,7 @@ public class PspdfkitApiImpl: NSObject, PspdfkitApi, PDFViewControllerDelegate, 
     func getAnnotationState(completion: @escaping (Result<NSDictionary?, Error>) -> Void) {
         if let m = pdfViewController?.annotationStateManager {
             completion(
-                .success([ "state": m.state, "variant": m.variant ])
+                .success([ "state": m.state?.rawValue, "variant": m.variant?.rawValue ])
             )
             return
         }
