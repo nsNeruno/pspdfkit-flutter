@@ -1908,7 +1908,7 @@ class PspdfkitWidgetControllerApiSetup {
         
         let canRedoChannel = FlutterBasicMessageChannel(name: "\(channelPrefix).canRedo\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
         if let api = api {
-            canUndoChannel.setMessageHandler { message, reply in
+            canRedoChannel.setMessageHandler { message, reply in
                 api.canRedo { res in
                     reply(wrapResult(res))
                 }
@@ -1919,7 +1919,7 @@ class PspdfkitWidgetControllerApiSetup {
         
         let redoChannel = FlutterBasicMessageChannel(name: "\(channelPrefix).redo\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
         if let api = api {
-            undoChannel.setMessageHandler { message, reply in
+            redoChannel.setMessageHandler { message, reply in
                 api.redo { res in
                     reply(wrapResult(res))
                 }

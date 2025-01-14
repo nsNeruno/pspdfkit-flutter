@@ -313,6 +313,61 @@ public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PD
         }
         completion(.success(false))
     }
+    
+    func getAnnotationState(completion: @escaping (Result<NSDictionary?, any Error>) -> Void) {
+        if let m = pdfViewController?.annotationStateManager {
+            completion(
+                .success([ "state": m.state?.rawValue, "variant": m.variant?.rawValue ])
+            )
+            return
+        }
+        completion(.success(nil))
+    }
+    
+    func toggleInkAnnotation(completion: @escaping (Result<Any?, any Error>) -> Void) {
+        pdfViewController?.annotationStateManager.toggleState(.ink)
+        completion(.success(nil))
+    }
+    
+    func toggleInkHighlightAnnotation(completion: @escaping (Result<Any?, any Error>) -> Void) {
+        pdfViewController?.annotationStateManager.toggleState(.ink, variant: .inkHighlighter)
+        completion(.success(nil))
+    }
+    
+    func toggleLineAnnotation(completion: @escaping (Result<Any?, any Error>) -> Void) {
+        pdfViewController?.annotationStateManager.toggleState(.line)
+        completion(.success(nil))
+    }
+    
+    func toggleArrowAnnotation(completion: @escaping (Result<Any?, any Error>) -> Void) {
+        pdfViewController?.annotationStateManager.toggleState(.line, variant: .lineArrow)
+        completion(.success(nil))
+    }
+    
+    func toggleSquareAnnotation(completion: @escaping (Result<Any?, any Error>) -> Void) {
+        pdfViewController?.annotationStateManager.toggleState(.square)
+        completion(.success(nil))
+    }
+    
+    func toggleCircleAnnotation(completion: @escaping (Result<Any?, any Error>) -> Void) {
+        pdfViewController?.annotationStateManager.toggleState(.circle)
+        completion(.success(nil))
+    }
+    
+    func toggleCloudAnnotation(completion: @escaping (Result<Any?, any Error>) -> Void) {
+        pdfViewController?.annotationStateManager.toggleState(.polygon, variant: .polygonCloud)
+        completion(.success(nil))
+    }
+    
+    func toggleCalloutAnnotation(completion: @escaping (Result<Any?, any Error>) -> Void) {
+        pdfViewController?.annotationStateManager.toggleState(.freeText, variant: .freeTextCallout)
+        completion(.success(nil))
+    }
+    
+    func toggleFreeTextAnnotation(completion: @escaping (Result<Any?, any Error>) -> Void) {
+        pdfViewController?.annotationStateManager.toggleState(.freeText)
+        completion(.success(nil))
+    }
     // MARK: End Custom Methods
     
     @objc public func register( binaryMessenger: FlutterBinaryMessenger, viewId: String){
