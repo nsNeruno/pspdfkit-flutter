@@ -1575,6 +1575,27 @@ interface PspdfkitWidgetControllerApi {
   fun addEventListener(event: NutrientEvent)
   fun removeEventListener(event: NutrientEvent)
 
+  fun canUndo(callback: (Result<Boolean>) -> Unit)
+  fun undo(callback: (Result<Boolean>) -> Unit)
+  fun canRedo(callback: (Result<Boolean>) -> Unit)
+  fun redo(callback: (Result<Boolean>) -> Unit)
+
+  fun getAnnotationState(callback: (Result<Map<String, Any?>?>) -> Unit)
+
+  fun toggleInkAnnotation(callback: (Result<Any?>) -> Unit)
+  fun toggleInkHighlightAnnotation(callback: (Result<Any?>) -> Unit)
+
+  fun toggleLineAnnotation(callback: (Result<Any?>) -> Unit)
+  fun toggleArrowAnnotation(callback: (Result<Any?>) -> Unit)
+
+  fun toggleSquareAnnotation(callback: (Result<Any?>) -> Unit)
+  fun toggleCircleAnnotation(callback: (Result<Any?>) -> Unit)
+
+  fun toggleCloudAnnotation(callback: (Result<Any?>) -> Unit)
+
+  fun toggleCalloutAnnotation(callback: (Result<Any?>) -> Unit)
+  fun toggleFreeTextAnnotation(callback: (Result<Any?>) -> Unit)
+
   companion object {
     /** The codec used by PspdfkitWidgetControllerApi. */
     val codec: MessageCodec<Any?> by lazy {
@@ -1936,6 +1957,186 @@ interface PspdfkitWidgetControllerApi {
               wrapError(exception)
             }
             reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+
+      val channelPrefix = "dev.flutter.pigeon.pspdfkit_flutter.PspdfkitWidgetControllerApi"
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.canUndo$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.canUndo { result ->
+              reply.reply(
+                wrapResult(result.getOrDefault(false))
+              )
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.undo$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.undo { _ ->
+              reply.reply(
+                wrapResult(null)
+              )
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.canRedo$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.canRedo { result ->
+              reply.reply(
+                wrapResult(result.getOrDefault(false))
+              )
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.redo$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.redo { _ ->
+              reply.reply(
+                wrapResult(null)
+              )
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.getAnnotationState$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.getAnnotationState { result ->
+              reply.reply(
+                wrapResult(result.getOrNull())
+              )
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.toggleInkAnnotation$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.toggleInkAnnotation { _ ->
+              reply.reply(wrapResult(null))
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.toggleInkHighlightAnnotation$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.toggleInkHighlightAnnotation { _ ->
+              reply.reply(wrapResult(null))
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.toggleLineAnnotation$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.toggleLineAnnotation { _ ->
+              reply.reply(wrapResult(null))
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.toggleArrowAnnotation$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.toggleArrowAnnotation { _ ->
+              reply.reply(wrapResult(null))
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.toggleSquareAnnotation$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.toggleSquareAnnotation { _ ->
+              reply.reply(wrapResult(null))
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.toggleCircleAnnotation$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.toggleCircleAnnotation { _ ->
+              reply.reply(wrapResult(null))
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.toggleCloudAnnotation$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.toggleCloudAnnotation { _ ->
+              reply.reply(wrapResult(null))
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.toggleCalloutAnnotation$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.toggleCalloutAnnotation { _ ->
+              reply.reply(wrapResult(null))
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "$channelPrefix.toggleFreeTextAnnotation$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.toggleFreeTextAnnotation { _ ->
+              reply.reply(wrapResult(null))
+            }
           }
         } else {
           channel.setMessageHandler(null)

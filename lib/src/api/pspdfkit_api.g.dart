@@ -2103,16 +2103,14 @@ class PspdfkitWidgetControllerApi {
     return _unwrapReplies(channel.name, replies, (_) => _ == true,);
   }
 
-  Future<bool> undo() async {
+  Future<void> undo() async {
     final channel = _provideChannel('undo',);
-    final replies = await channel.send(null,);
-    return _unwrapReplies(channel.name, replies, (_) => _ == true,);
+    await channel.send(null,);
   }
 
-  Future<bool> redo() async {
+  Future<void> redo() async {
     final channel = _provideChannel('redo',);
-    final replies = await channel.send(null,);
-    return _unwrapReplies(channel.name, replies, (_) => _ == true,);
+    await channel.send(null,);
   }
 
   Future<bool> canRedo() async {
