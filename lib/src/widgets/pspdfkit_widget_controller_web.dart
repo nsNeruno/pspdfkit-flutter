@@ -128,4 +128,84 @@ class PspdfkitWidgetControllerWeb extends PspdfkitWidgetController {
   Future<double> getZoomScale(int pageIndex) {
     return pspdfkitInstance.getZoomScale(pageIndex);
   }
+
+  @override
+  Future<bool> canUndo() {
+    return pspdfkitInstance.canUndo();
+  }
+
+  @override
+  Future<void> undo() async {
+    await pspdfkitInstance.undo();
+  }
+
+  @override
+  Future<bool> canRedo() {
+    return pspdfkitInstance.canRedo();
+  }
+
+  @override
+  Future<void> redo() async {
+    await pspdfkitInstance.redo();
+  }
+
+  @override
+  Future<Map?> getAnnotationState() async {
+    return {
+      'state': pspdfkitInstance.viewState['interactionMode'],
+      // 'variant': null,
+    };
+  }
+  
+  @override
+  Future<void> toggleInkAnnotation() async {
+    await pspdfkitInstance.setCurrentAnnotationPreset('ink',);
+    await pspdfkitInstance.setInteractionMode('INK',);
+  }
+  
+  @override
+  Future<void> toggleInkHighlightAnnotation() async {
+    await pspdfkitInstance.setCurrentAnnotationPreset('highlighter',);
+    await pspdfkitInstance.setInteractionMode('INK',);
+  }
+  
+  @override
+  Future<void> toggleLineAnnotation() async {
+    await pspdfkitInstance.setCurrentAnnotationPreset('line',);
+    await pspdfkitInstance.setInteractionMode('SHAPE_LINE',);
+  }
+
+  @override
+  Future<void> toggleArrowAnnotation() async {
+    await pspdfkitInstance.setCurrentAnnotationPreset('arrow',);
+    await pspdfkitInstance.setInteractionMode('SHAPE_LINE',);
+  }
+
+  @override
+  Future<void> toggleSquareAnnotation() async {
+    await pspdfkitInstance.setCurrentAnnotationPreset('rectangle',);
+    await pspdfkitInstance.setInteractionMode('SHAPE_RECTANGLE',);
+  }
+
+  @override
+  Future<void> toggleCircleAnnotation() async {
+    await pspdfkitInstance.setCurrentAnnotationPreset('ellipse',);
+    await pspdfkitInstance.setInteractionMode('SHAPE_ELLIPSE',);
+  }
+
+  @override
+  Future<void> toggleCloudAnnotation() async {
+    await pspdfkitInstance.setCurrentAnnotationPreset('cloudy-polygon',);
+    await pspdfkitInstance.setInteractionMode('SHAPE_POLYGON',);
+  }
+
+  @override
+  Future<void> toggleCalloutAnnotation() async {
+    await pspdfkitInstance.setInteractionMode('CALLOUT',);
+  }
+
+  @override
+  Future<void> toggleFreeTextAnnotation() async {
+    await pspdfkitInstance.setInteractionMode('TEXT',);
+  }
 }

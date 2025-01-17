@@ -481,4 +481,66 @@ class PspdfkitWebInstance {
     var result = context.callMethod('instanceOf', [formField, formFieldClass]);
     return result;
   }
+
+  JsObject get _history => _pspdfkitInstance['history'];
+  JsObject get viewState => _pspdfkitInstance['viewState'];
+  JsObject get _interactionMode => context['PSPDFKit']['InteractionMode'];
+
+  Future<void> setShowToolbar(bool isShowing,) async {
+    await setInteractionMode(null,);
+    var viewState = this.viewState;
+    viewState = await viewState.callMethod('set', [ 'showToolbar', isShowing, ],);
+    viewState = await viewState.callMethod('set', [ 'enableAnnotationToolbar', isShowing, ],);
+    await _pspdfkitInstance.callMethod('setViewState', [ viewState, ],);
+  }
+
+  // bool _hasAddedVSC = false;
+  //
+  // void addViewStateChangeListener() {
+  //   if (_hasAddedVSC) { return; }
+  //   addEventListener(
+  //     'viewState.change',
+  //     (event) {
+  //       print('viewState: ${event[0]}',);
+  //       print('previousViewState: ${event[1]}',);
+  //     },
+  //   );
+  //   _hasAddedVSC = true;
+  // }
+
+  Future<bool> canUndo() async {
+    return _history.callMethod('canUndo',);
+  }
+
+  Future<void> undo() async {
+    if (await canUndo()) {
+      await _history.callMethod('undo',);
+    }
+  }
+
+  Future<bool> canRedo() async {
+    return _history.callMethod('canRedo',);
+  }
+
+  Future<void> redo() async {
+    if (await canRedo()) {
+      await _history.callMethod('redo',);
+    }
+  }
+
+  String? get interactionMode => viewState['interactionMode'];
+
+  Future<void> setCurrentAnnotationPreset(String? preset,) async {
+    await setShowToolbar(false,);
+    await _pspdfkitInstance.callMethod('setCurrentAnnotationPreset', [preset,],);
+  }
+
+  Future<void> setInteractionMode(String? mode,) async {
+    var viewState = this.viewState;
+    viewState = await viewState.callMethod(
+      'set',
+      [ 'interactionMode', mode != null ? _interactionMode[mode] : null,],
+    );
+    await _pspdfkitInstance.callMethod('setViewState', [viewState,],);
+  }
 }
