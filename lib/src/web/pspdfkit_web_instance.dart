@@ -67,7 +67,7 @@ class PspdfkitWebInstance {
   Future<dynamic> getAnnotations(int pageIndex,
       [String? annotationType]) async {
     var annotationsPromise =
-        await _pspdfkitInstance.callMethod('getAnnotations', [pageIndex]);
+    await _pspdfkitInstance.callMethod('getAnnotations', [pageIndex]);
 
     var annotations = await promiseToFuture(annotationsPromise);
     var annotationJSON = <dynamic>[];
@@ -117,7 +117,7 @@ class PspdfkitWebInstance {
   /// Returns a [String] containing the Instant JSON data, or throws an exception if the export failed.
   Future<String?> exportInstantJson() async {
     var annotationsJsonPromise =
-        await _pspdfkitInstance.callMethod('exportInstantJSON');
+    await _pspdfkitInstance.callMethod('exportInstantJSON');
     JsObject instant = await promiseToFuture(annotationsJsonPromise);
     return instant.toJson().toString();
   }
@@ -147,11 +147,11 @@ class PspdfkitWebInstance {
   /// The [xfdfPath] parameter is a String representing the file path of the XFDF file to export.
   /// Throws an error if the operation fails.
   Future<void> exportXfdf(
-    String xfdfPath,
-  ) async {
+      String xfdfPath,
+      ) async {
     try {
       var xfdf =
-          await promiseToFuture(_pspdfkitInstance.callMethod('exportXFDF'));
+      await promiseToFuture(_pspdfkitInstance.callMethod('exportXFDF'));
       // Download the XFDF file to the provided path.
       var blob = Blob([xfdf], 'application/vnd.adobe.xfdf');
       var url = Url.createObjectUrlFromBlob(blob);
@@ -248,8 +248,8 @@ class PspdfkitWebInstance {
     try {
       await promiseToFuture(
           _pspdfkitInstance.callMethod('setMeasurementPrecision', [
-        precision.webName,
-      ]));
+            precision.webName,
+          ]));
     } catch (e) {
       throw Exception('Failed to set measurement precision: $e');
     }
@@ -268,8 +268,8 @@ class PspdfkitWebInstance {
     try {
       await promiseToFuture(
           _pspdfkitInstance.callMethod('setMeasurementScale', [
-        JsObject.jsify(webScale),
-      ]));
+            JsObject.jsify(webScale),
+          ]));
     } catch (e) {
       throw Exception('Failed to set measurement scale: $e');
     }
@@ -357,7 +357,7 @@ class PspdfkitWebInstance {
   /// Returns a [Future] that completes with the [PageInfo] object for the given page index.
   Future<PageInfo> getPageInfo(int pageIndex) async {
     var pageInfo =
-        _pspdfkitInstance.callMethod('pageInfoForIndex', [pageIndex]);
+    _pspdfkitInstance.callMethod('pageInfoForIndex', [pageIndex]);
     return PageInfo(
       pageIndex: pageInfo['pageIndex'],
       height: pageInfo['height'],
@@ -384,7 +384,7 @@ class PspdfkitWebInstance {
   /// Get all form fields in the document.
   Future<List<PdfFormField>> getFormFields() async {
     JsObject formFields =
-        await promiseToFuture(_pspdfkitInstance.callMethod('getFormFields'));
+    await promiseToFuture(_pspdfkitInstance.callMethod('getFormFields'));
 
     // `getFormFields` returns a custom  (PSPDFKit.Immutable.List)[https://pspdfkit.com/api/web/PSPDFKit.Immutable.List.html]
     // whose value in an iterator. We need to convert this to a Dart list.
@@ -443,15 +443,15 @@ class PspdfkitWebInstance {
   String _getFormFieldType(JsObject field) {
     JsObject textClass = context['PSPDFKit']['FormFields']['TextFormField'];
     JsObject signatureClass =
-        context['PSPDFKit']['FormFields']['SignatureFormField'];
+    context['PSPDFKit']['FormFields']['SignatureFormField'];
     JsObject checkBoxClass =
-        context['PSPDFKit']['FormFields']['CheckBoxFormField'];
+    context['PSPDFKit']['FormFields']['CheckBoxFormField'];
     JsObject radioButtonClass =
-        context['PSPDFKit']['FormFields']['RadioButtonFormField'];
+    context['PSPDFKit']['FormFields']['RadioButtonFormField'];
     JsObject comboBoxClass =
-        context['PSPDFKit']['FormFields']['ComboBoxFormField'];
+    context['PSPDFKit']['FormFields']['ComboBoxFormField'];
     JsObject listBoxClass =
-        context['PSPDFKit']['FormFields']['ListBoxFormField'];
+    context['PSPDFKit']['FormFields']['ListBoxFormField'];
     JsObject buttonClass = context['PSPDFKit']['FormFields']['ButtonFormField'];
 
     if (_instanceOf(field, textClass)) {
@@ -480,5 +480,67 @@ class PspdfkitWebInstance {
     context.callMethod('eval', [script]);
     var result = context.callMethod('instanceOf', [formField, formFieldClass]);
     return result;
+  }
+
+  JsObject get _history => _pspdfkitInstance['history'];
+  JsObject get viewState => _pspdfkitInstance['viewState'];
+  JsObject get _interactionMode => context['PSPDFKit']['InteractionMode'];
+
+  Future<void> setShowToolbar(bool isShowing,) async {
+    await setInteractionMode(null,);
+    var viewState = this.viewState;
+    viewState = await viewState.callMethod('set', [ 'showToolbar', isShowing, ],);
+    viewState = await viewState.callMethod('set', [ 'enableAnnotationToolbar', isShowing, ],);
+    await _pspdfkitInstance.callMethod('setViewState', [ viewState, ],);
+  }
+
+  // bool _hasAddedVSC = false;
+  //
+  // void addViewStateChangeListener() {
+  //   if (_hasAddedVSC) { return; }
+  //   addEventListener(
+  //     'viewState.change',
+  //     (event) {
+  //       print('viewState: ${event[0]}',);
+  //       print('previousViewState: ${event[1]}',);
+  //     },
+  //   );
+  //   _hasAddedVSC = true;
+  // }
+
+  Future<bool> canUndo() async {
+    return _history.callMethod('canUndo',);
+  }
+
+  Future<void> undo() async {
+    if (await canUndo()) {
+      await _history.callMethod('undo',);
+    }
+  }
+
+  Future<bool> canRedo() async {
+    return _history.callMethod('canRedo',);
+  }
+
+  Future<void> redo() async {
+    if (await canRedo()) {
+      await _history.callMethod('redo',);
+    }
+  }
+
+  String? get interactionMode => viewState['interactionMode'];
+
+  Future<void> setCurrentAnnotationPreset(String? preset,) async {
+    await setShowToolbar(false,);
+    await _pspdfkitInstance.callMethod('setCurrentAnnotationPreset', [preset,],);
+  }
+
+  Future<void> setInteractionMode(String? mode,) async {
+    var viewState = this.viewState;
+    viewState = await viewState.callMethod(
+      'set',
+      [ 'interactionMode', mode != null ? _interactionMode[mode] : null,],
+    );
+    await _pspdfkitInstance.callMethod('setViewState', [viewState,],);
   }
 }

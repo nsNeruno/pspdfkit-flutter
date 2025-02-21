@@ -33,6 +33,8 @@ import com.pspdfkit.forms.EditableButtonFormElement
 import com.pspdfkit.forms.SignatureFormElement
 import com.pspdfkit.forms.TextFormElement
 import com.pspdfkit.ui.PdfUiFragment
+import com.pspdfkit.ui.special_mode.controller.AnnotationTool
+import com.pspdfkit.ui.special_mode.controller.AnnotationToolVariant
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -631,5 +633,117 @@ class PspdfkitViewImpl : PspdfkitWidgetControllerApi {
 
     override fun removeEventListener(event: NutrientEvent) {
         eventDispatcher?.removeEventListener(pdfUiFragment!!, event)
+    }
+
+    override fun canUndo(callback: (Result<Boolean>) -> Unit) {
+        callback.invoke(
+            Result.success(
+                pdfUiFragment?.pdfFragment?.undoManager?.canUndo() ?: false
+            )
+        )
+    }
+
+    override fun undo(callback: (Result<Boolean>) -> Unit) {
+        callback(
+            Result.success(
+                pdfUiFragment?.pdfFragment?.undoManager?.let {
+                    if (it.canUndo()) {
+                        it.undo()
+                        true
+                    } else {
+                        false
+                    }
+                } ?: false
+            )
+        )
+    }
+
+    override fun canRedo(callback: (Result<Boolean>) -> Unit) {
+        callback.invoke(
+            Result.success(
+                pdfUiFragment?.pdfFragment?.undoManager?.canRedo() ?: false
+            )
+        )
+    }
+
+    override fun redo(callback: (Result<Boolean>) -> Unit) {
+        callback(
+            Result.success(
+                pdfUiFragment?.pdfFragment?.undoManager?.let {
+                    if (it.canRedo()) {
+                        it.redo()
+                        true
+                    } else {
+                        false
+                    }
+                } ?: false
+            )
+        )
+    }
+
+    override fun getAnnotationState(callback: (Result<Map<String, Any?>?>) -> Unit) {
+        val state = pdfUiFragment?.pdfFragment?.activeAnnotationTool?.toAnnotationType()?.name
+        val variant = pdfUiFragment?.pdfFragment?.activeAnnotationToolVariant?.name
+        callback(
+            Result.success(
+                mapOf(
+                    "state" to state, "variant" to variant
+                )
+            )
+        )
+    }
+
+    override fun toggleInkAnnotation(callback: (Result<Any?>) -> Unit) {
+        pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(AnnotationTool.INK)
+        callback(Result.success(null))
+    }
+
+    override fun toggleInkHighlightAnnotation(callback: (Result<Any?>) -> Unit) {
+        pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(
+            AnnotationTool.INK,
+            AnnotationToolVariant.fromPreset(AnnotationToolVariant.Preset.HIGHLIGHTER)
+        )
+        callback(Result.success(null))
+    }
+
+    override fun toggleLineAnnotation(callback: (Result<Any?>) -> Unit) {
+        pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(AnnotationTool.LINE)
+        callback(Result.success(null))
+    }
+
+    override fun toggleArrowAnnotation(callback: (Result<Any?>) -> Unit) {
+        pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(
+            AnnotationTool.LINE,
+            AnnotationToolVariant.fromPreset(AnnotationToolVariant.Preset.ARROW)
+        )
+        callback(Result.success(null))
+    }
+
+    override fun toggleSquareAnnotation(callback: (Result<Any?>) -> Unit) {
+        pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(AnnotationTool.SQUARE)
+        callback(Result.success(null))
+    }
+
+    override fun toggleCircleAnnotation(callback: (Result<Any?>) -> Unit) {
+        pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(AnnotationTool.CIRCLE)
+        callback(Result.success(null))
+    }
+
+    override fun toggleCloudAnnotation(callback: (Result<Any?>) -> Unit) {
+        pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(
+            AnnotationTool.POLYGON,
+            AnnotationToolVariant.fromPreset(AnnotationToolVariant.Preset.CLOUDY)
+        )
+        callback(Result.success(null))
+    }
+
+    override fun toggleCalloutAnnotation(callback: (Result<Any?>) -> Unit) {
+        pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(AnnotationTool.FREETEXT_CALLOUT)
+        callback(Result.success(null))
+    }
+
+    override fun toggleFreeTextAnnotation(callback: (Result<Any?>) -> Unit) {
+        pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(AnnotationTool.FREETEXT)
+        callback(Result.success(null))
     }
 }

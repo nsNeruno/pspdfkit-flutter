@@ -172,4 +172,74 @@ class PspdfkitFlutterWidgetControllerImpl
   void onDocumentSaved(String documentId, String? path) {
     onPdfDocumentSaved?.call(documentId, path);
   }
+
+  @override
+  Future<bool> canRedo() {
+    return _pspdfkitWidgetControllerApi.canRedo();
+  }
+
+  @override
+  Future<bool> canUndo() {
+    return _pspdfkitWidgetControllerApi.canUndo();
+  }
+
+  @override
+  Future<Map?> getAnnotationState() {
+    return _pspdfkitWidgetControllerApi.getAnnotationState();
+  }
+
+  @override
+  Future<void> redo() async {
+    await _pspdfkitWidgetControllerApi.redo();
+  }
+
+  @override
+  Future<void> toggleArrowAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleArrowAnnotation();
+  }
+
+  @override
+  Future<void> toggleCalloutAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleCalloutAnnotation();
+  }
+
+  @override
+  Future<void> toggleCircleAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleCircleAnnotation();
+  }
+
+  @override
+  Future<void> toggleCloudAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleCloudAnnotation();
+  }
+
+  @override
+  Future<void> toggleFreeTextAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleFreeTextAnnotation();
+  }
+
+  @override
+  Future<void> toggleInkAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleInkAnnotation();
+  }
+
+  @override
+  Future<void> toggleInkHighlightAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleInkHighlightAnnotation();
+  }
+
+  @override
+  Future<void> toggleLineAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleLineAnnotation();
+  }
+
+  @override
+  Future<void> toggleSquareAnnotation() async {
+    await _pspdfkitWidgetControllerApi.toggleSquareAnnotation();
+  }
+
+  @override
+  Future<void> undo() async {
+    await _pspdfkitWidgetControllerApi.undo();
+  }
 }

@@ -271,6 +271,90 @@ public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PD
         eventsHelper?.removeEventListener(event: event)
     }
     
+    func canUndo(completion: @escaping (Result<Bool, any Error>) -> Void) {
+        if let um = pdfViewController?.undoManager {
+            completion(.success(um.canUndo))
+            return
+        }
+        completion(.success(false))
+    }
+    
+    func undo(completion: @escaping (Result<Bool, any Error>) -> Void) {
+        if let um = pdfViewController?.undoManager {
+            if um.canUndo {
+                um.undo()
+            }
+            completion(.success(um.canUndo))
+            return
+        }
+        completion(.success(false))
+    }
+    
+    func canRedo(completion: @escaping (Result<Bool, any Error>) -> Void) {
+        if let um = pdfViewController?.undoManager {
+            completion(.success(um.canRedo))
+            return
+        }
+        completion(.success(false))
+    }
+    
+    func redo(completion: @escaping (Result<Bool, any Error>) -> Void) {
+        if let um = pdfViewController?.undoManager {
+            if um.canRedo {
+                um.redo()
+            }
+            completion(.success(um.canRedo))
+            return
+        }
+        completion(.success(false))
+    }
+    
+    func getAnnotationState(completion: @escaping (Result<[String : Any?]?, any Error>) -> Void) {
+        if let m = pdfViewController?.annotationStateManager {
+            completion(
+                .success([ "state": m.state?.rawValue, "variant": m.variant?.rawValue ])
+            )
+            return
+        }
+        completion(.success(nil))
+    }
+    
+    func toggleInkAnnotation() throws {
+        pdfViewController?.annotationStateManager.toggleState(.ink)
+    }
+    
+    func toggleInkHighlightAnnotation() throws {
+        pdfViewController?.annotationStateManager.toggleState(.ink, variant: .inkHighlighter)
+    }
+    
+    func toggleLineAnnotation() throws {
+        pdfViewController?.annotationStateManager.toggleState(.line)
+    }
+    
+    func toggleArrowAnnotation() throws {
+        pdfViewController?.annotationStateManager.toggleState(.line, variant: .lineArrow)
+    }
+    
+    func toggleSquareAnnotation() throws {
+        pdfViewController?.annotationStateManager.toggleState(.square)
+    }
+    
+    func toggleCircleAnnotation() throws {
+        pdfViewController?.annotationStateManager.toggleState(.circle)
+    }
+    
+    func toggleCloudAnnotation() throws {
+        pdfViewController?.annotationStateManager.toggleState(.polygon, variant: .polygonCloud)
+    }
+    
+    func toggleCalloutAnnotation() throws {
+        pdfViewController?.annotationStateManager.toggleState(.freeText, variant: .freeTextCallout)
+    }
+    
+    func toggleFreeTextAnnotation() throws {
+        pdfViewController?.annotationStateManager.toggleState(.freeText)
+    }
+    
     @objc func spreadIndexDidChange(_ notification: Notification) {
           if let newSpreadIndex = notification.userInfo?["PSPDFDocumentViewControllerSpreadIndexKey"] as? Int,
             let newPageIndex = self.pdfViewController?.documentViewController?.layout.pageRangeForSpread(at: newSpreadIndex).location {

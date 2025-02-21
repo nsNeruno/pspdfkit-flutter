@@ -542,6 +542,39 @@ abstract class PspdfkitWidgetControllerApi {
   void addEventListener(NutrientEvent event);
 
   void removeEventListener(NutrientEvent event);
+
+  @async
+  bool canUndo();
+
+  @async
+  bool undo();
+
+  @async
+  bool canRedo();
+
+  @async
+  bool redo();
+
+  @async
+  Map<String, Object?>? getAnnotationState();
+
+  void toggleInkAnnotation();
+
+  void toggleInkHighlightAnnotation();
+
+  void toggleLineAnnotation();
+
+  void toggleArrowAnnotation();
+
+  void toggleSquareAnnotation();
+
+  void toggleCircleAnnotation();
+
+  void toggleCloudAnnotation();
+
+  void toggleCalloutAnnotation();
+
+  void toggleFreeTextAnnotation();
 }
 
 @HostApi()
