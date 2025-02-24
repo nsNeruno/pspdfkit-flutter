@@ -693,57 +693,48 @@ class PspdfkitViewImpl : PspdfkitWidgetControllerApi {
         )
     }
 
-    override fun toggleInkAnnotation(callback: (Result<Any?>) -> Unit) {
+    override fun toggleInkAnnotation() {
         pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(AnnotationTool.INK)
-        callback(Result.success(null))
     }
 
-    override fun toggleInkHighlightAnnotation(callback: (Result<Any?>) -> Unit) {
+    override fun toggleInkHighlightAnnotation() {
         pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(
             AnnotationTool.INK,
             AnnotationToolVariant.fromPreset(AnnotationToolVariant.Preset.HIGHLIGHTER)
         )
-        callback(Result.success(null))
     }
 
-    override fun toggleLineAnnotation(callback: (Result<Any?>) -> Unit) {
+    override fun toggleLineAnnotation() {
         pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(AnnotationTool.LINE)
-        callback(Result.success(null))
     }
 
-    override fun toggleArrowAnnotation(callback: (Result<Any?>) -> Unit) {
+    override fun toggleArrowAnnotation() {
         pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(
             AnnotationTool.LINE,
             AnnotationToolVariant.fromPreset(AnnotationToolVariant.Preset.ARROW)
         )
-        callback(Result.success(null))
     }
 
-    override fun toggleSquareAnnotation(callback: (Result<Any?>) -> Unit) {
+    override fun toggleSquareAnnotation() {
         pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(AnnotationTool.SQUARE)
-        callback(Result.success(null))
     }
 
-    override fun toggleCircleAnnotation(callback: (Result<Any?>) -> Unit) {
+    override fun toggleCircleAnnotation() {
         pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(AnnotationTool.CIRCLE)
-        callback(Result.success(null))
     }
 
-    override fun toggleCloudAnnotation(callback: (Result<Any?>) -> Unit) {
+    override fun toggleCloudAnnotation() {
         pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(
             AnnotationTool.POLYGON,
             AnnotationToolVariant.fromPreset(AnnotationToolVariant.Preset.CLOUDY)
         )
-        callback(Result.success(null))
     }
 
-    override fun toggleCalloutAnnotation(callback: (Result<Any?>) -> Unit) {
+    override fun toggleCalloutAnnotation() {
         pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(AnnotationTool.FREETEXT_CALLOUT)
-        callback(Result.success(null))
     }
 
-    override fun toggleFreeTextAnnotation(callback: (Result<Any?>) -> Unit) {
+    override fun toggleFreeTextAnnotation() {
         pdfUiFragment?.pdfFragment?.enterAnnotationCreationMode(AnnotationTool.FREETEXT)
-        callback(Result.success(null))
     }
 }
