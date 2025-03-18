@@ -39,7 +39,7 @@ enum AnnotationType {
   note,
   stamp,
   caret,
-  richMedia,
+  media,
   screen,
   widget,
   file,
@@ -50,7 +50,8 @@ enum AnnotationType {
   watermark,
   trapNet,
   type3d,
-  redact
+  redact,
+  image,
 }
 
 enum AnnotationTool {
@@ -330,16 +331,19 @@ abstract class PspdfkitApi {
   String? exportInstantJson();
 
   @async
-  bool? addAnnotation(String jsonAnnotation);
+  bool? addAnnotation(String annotation, String? attachment);
 
   @async
-  bool? removeAnnotation(String jsonAnnotation);
+  bool? removeAnnotation(String annotation);
 
   @async
   Object? getAnnotations(int pageIndex, String type);
 
   @async
   Object? getAllUnsavedAnnotations();
+
+  @async
+  void updateAnnotation(String annotation);
 
   @async
   bool? processAnnotations(
@@ -380,6 +384,9 @@ abstract class PspdfkitApi {
 
   @async
   String getTemporaryDirectory();
+
+  @async
+  void setAuthorName(String name);
 
   @async
   String getAuthorName();
@@ -473,12 +480,12 @@ abstract class PspdfkitWidgetControllerApi {
   /// Adds the given annotation to the presented document.
   /// `jsonAnnotation` can either be a JSON string or a valid JSON Dictionary (iOS) / HashMap (Android).
   @async
-  bool? addAnnotation(String jsonAnnotation);
+  bool? addAnnotation(String annotation);
 
   /// Removes the given annotation from the presented document.
   /// `jsonAnnotation` can either be a JSON string or a valid JSON Dictionary (iOS) / HashMap (Android).
   @async
-  bool? removeAnnotation(String jsonAnnotation);
+  bool? removeAnnotation(String annotation);
 
   /// Returns a list of JSON dictionaries for all the annotations of the given `type` on the given `pageIndex`.
   @async
@@ -542,6 +549,23 @@ abstract class PspdfkitWidgetControllerApi {
   void addEventListener(NutrientEvent event);
 
   void removeEventListener(NutrientEvent event);
+
+  /// Enters annotation creation mode.
+  ///
+  /// If [annotationTool] is provided, that specific tool will be activated.
+  /// If no tool is provided, the default annotation tool will be used.
+  ///
+  /// Returns a [Future] that completes with a boolean indicating whether
+  /// entering annotation creation mode was successful.
+  @async
+  bool? enterAnnotationCreationMode(AnnotationTool? annotationTool);
+
+  /// Exits annotation creation mode.
+  ///
+  /// Returns a [Future] that completes with a boolean indicating whether
+  /// exiting annotation creation mode was successful.
+  @async
+  bool? exitAnnotationCreationMode();
 
   @async
   bool canUndo();
@@ -617,7 +641,15 @@ abstract class PdfDocumentApi {
   /// Adds the given annotation to the presented document.
   /// `jsonAnnotation` can either be a JSON string or a valid JSON Dictionary (iOS) / HashMap (Android).
   @async
-  bool? addAnnotation(String jsonAnnotation);
+  bool? addAnnotation(
+    String jsonAnnotation,
+    Object? attachment,
+  );
+
+  /// Updates the given annotation in the presented document.
+  /// `jsonAnnotation` can either be a JSON string or a valid JSON Dictionary (iOS) / HashMap (Android).
+  @async
+  bool? updateAnnotation(String jsonAnnotation);
 
   /// Removes the given annotation from the presented document.
   /// `jsonAnnotation` can either be a JSON string or a valid JSON Dictionary (iOS) / HashMap (Android).
@@ -644,6 +676,10 @@ abstract class PdfDocumentApi {
   /// If there were no changes to the document, the document file will not be modified.
   @async
   bool save(String? outputPath, DocumentSaveOptions? options);
+
+  /// Get the total number of pages in the document.
+  @async
+  int getPageCount();
 }
 
 @FlutterApi()

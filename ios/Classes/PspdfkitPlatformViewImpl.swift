@@ -1,5 +1,5 @@
 //
-//  Copyright © 2024 PSPDFKit GmbH. All rights reserved.
+//  Copyright © 2024-2025 PSPDFKit GmbH. All rights reserved.
 //
 //  THIS SOURCE CODE AND ANY ACCOMPANYING DOCUMENTATION ARE PROTECTED BY INTERNATIONAL COPYRIGHT LAW
 //  AND MAY NOT BE RESOLD OR REDISTRIBUTED. USAGE IS BOUND TO THE PSPDFKIT LICENSE AGREEMENT.
@@ -8,10 +8,11 @@
 //
 
 import Foundation
+import PSPDFKit
 
 @objc(PspdfkitPlatformViewImpl)
 public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PDFViewControllerDelegate {
-    
+
     private var pdfViewController: PDFViewController? = nil;
     private var pspdfkitWidgetCallbacks: PspdfkitWidgetCallbacks? = nil;
     private var viewId: String? = nil;
@@ -20,6 +21,9 @@ public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PD
     @objc public func setViewController(controller: PDFViewController){
         self.pdfViewController = controller
         self.pdfViewController?.delegate = self
+
+        // Set the host view for the annotation toolbar controller
+        controller.annotationToolbarController?.updateHostView(nil, container: nil, viewController: controller)
     }
     
     public func pdfViewController(_ pdfController: PDFViewController, didChange document: Document?) {
@@ -120,7 +124,7 @@ public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PD
         }
     }
     
-    func addAnnotation(jsonAnnotation: String, completion: @escaping (Result<Bool?, any Error>) -> Void) {
+    func addAnnotation(annotation jsonAnnotation: String, completion: @escaping (Result<Bool?, any Error>) -> Void) {
         do {
             guard let document = pdfViewController?.document, document.isValid else {
                completion(.failure(PspdfkitApiError(code: "", message: "PDF document not found or is invalid.", details: nil)))
@@ -133,7 +137,7 @@ public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PD
         }
     }
     
-    func removeAnnotation(jsonAnnotation: String, completion: @escaping (Result<Bool?, any Error>) -> Void) {
+    func removeAnnotation(annotation jsonAnnotation: String, completion: @escaping (Result<Bool?, any Error>) -> Void) {
         do {
             guard let document = pdfViewController?.document, document.isValid else {
                completion(.failure(PspdfkitApiError(code: "", message: "PDF document not found or is invalid.", details: nil)))
@@ -270,7 +274,70 @@ public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PD
     func removeEventListener(event: NutrientEvent) throws {
         eventsHelper?.removeEventListener(event: event)
     }
-    
+
+    func enterAnnotationCreationMode(annotationTool: AnnotationTool?, completion: @escaping (Result<Bool?, Error>) -> Void) {
+        guard let pdfViewController = pdfViewController else {
+            completion(.failure(PspdfkitApiError(code: "error", message: "PDF view controller is null", details: nil)))
+            return
+        }
+
+        do {
+            if let annotationTool = annotationTool {
+                // Get the Flutter tool name
+
+                // Use AnnotationHelper to map the Flutter tool to iOS tool
+                if let toolWithVariant = AnnotationHelper.getIOSAnnotationToolWithVariantFromFlutterName(annotationTool) {
+                    // Set the annotation tool
+                    if pdfViewController.annotationToolbarController?.isToolbarVisible == false {
+                        pdfViewController.annotationToolbarController?.showToolbar(animated: true)
+                    }
+                    pdfViewController.annotationStateManager.toggleState(toolWithVariant.annotationTool, variant: toolWithVariant.variant)
+                    // Ensure the annotation toolbar is visible
+                    completion(.success(true))
+                } else {
+                    // Default to ink pen if the tool is not supported
+                    let defaultTool = AnnotationToolWithVariant(annotationTool: .ink, variant: nil)
+                    if pdfViewController.annotationToolbarController?.isToolbarVisible == false {
+                        pdfViewController.annotationToolbarController?.showToolbar(animated: true)
+                    }
+                    pdfViewController.annotationStateManager.toggleState(defaultTool.annotationTool, variant: defaultTool.variant)
+                    // Ensure the annotation toolbar is visible
+                    completion(.success(true))
+                }
+            } else {
+                // Enter annotation creation mode with default tool (ink pen)
+                let defaultTool = AnnotationToolWithVariant(annotationTool: .ink, variant: nil)
+                if pdfViewController.annotationToolbarController?.isToolbarVisible == false {
+                    pdfViewController.annotationToolbarController?.showToolbar(animated: true)
+                }
+                pdfViewController.annotationStateManager.toggleState(defaultTool.annotationTool, variant: defaultTool.variant)
+                completion(.success(true))
+            }
+        } catch {
+            completion(.failure(PspdfkitApiError(code: "error", message: "Error entering annotation creation mode: \(error.localizedDescription)", details: nil)))
+        }
+    }
+
+    func exitAnnotationCreationMode(completion: @escaping (Result<Bool?, Error>) -> Void) {
+        guard let pdfViewController = pdfViewController else {
+            completion(.failure(PspdfkitApiError(code: "error", message: "PDF view controller is null", details: nil)))
+            return
+        }
+
+        do {
+            // Exit annotation creation mode
+            if pdfViewController.annotationToolbarController?.isToolbarVisible == true {
+                pdfViewController.annotationToolbarController?.hideToolbar(animated: true)
+            }
+            pdfViewController.annotationStateManager.setState(nil, variant: nil)
+            completion(.success(true))
+        } catch {
+            completion(.failure(PspdfkitApiError(code: "error", message: "Error exiting annotation creation mode: \(error.localizedDescription)", details: nil)))
+        }
+    }
+
+
+
     func canUndo(completion: @escaping (Result<Bool, any Error>) -> Void) {
         if let um = pdfViewController?.undoManager {
             completion(.success(um.canUndo))
@@ -278,7 +345,7 @@ public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PD
         }
         completion(.success(false))
     }
-    
+
     func undo(completion: @escaping (Result<Bool, any Error>) -> Void) {
         if let um = pdfViewController?.undoManager {
             if um.canUndo {
@@ -289,7 +356,7 @@ public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PD
         }
         completion(.success(false))
     }
-    
+
     func canRedo(completion: @escaping (Result<Bool, any Error>) -> Void) {
         if let um = pdfViewController?.undoManager {
             completion(.success(um.canRedo))
@@ -297,7 +364,7 @@ public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PD
         }
         completion(.success(false))
     }
-    
+
     func redo(completion: @escaping (Result<Bool, any Error>) -> Void) {
         if let um = pdfViewController?.undoManager {
             if um.canRedo {
@@ -308,7 +375,7 @@ public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PD
         }
         completion(.success(false))
     }
-    
+
     func getAnnotationState(completion: @escaping (Result<[String : Any?]?, any Error>) -> Void) {
         if let m = pdfViewController?.annotationStateManager {
             completion(
@@ -318,43 +385,43 @@ public class PspdfkitPlatformViewImpl: NSObject, PspdfkitWidgetControllerApi, PD
         }
         completion(.success(nil))
     }
-    
+
     func toggleInkAnnotation() throws {
         pdfViewController?.annotationStateManager.toggleState(.ink)
     }
-    
+
     func toggleInkHighlightAnnotation() throws {
         pdfViewController?.annotationStateManager.toggleState(.ink, variant: .inkHighlighter)
     }
-    
+
     func toggleLineAnnotation() throws {
         pdfViewController?.annotationStateManager.toggleState(.line)
     }
-    
+
     func toggleArrowAnnotation() throws {
         pdfViewController?.annotationStateManager.toggleState(.line, variant: .lineArrow)
     }
-    
+
     func toggleSquareAnnotation() throws {
         pdfViewController?.annotationStateManager.toggleState(.square)
     }
-    
+
     func toggleCircleAnnotation() throws {
         pdfViewController?.annotationStateManager.toggleState(.circle)
     }
-    
+
     func toggleCloudAnnotation() throws {
         pdfViewController?.annotationStateManager.toggleState(.polygon, variant: .polygonCloud)
     }
-    
+
     func toggleCalloutAnnotation() throws {
         pdfViewController?.annotationStateManager.toggleState(.freeText, variant: .freeTextCallout)
     }
-    
+
     func toggleFreeTextAnnotation() throws {
         pdfViewController?.annotationStateManager.toggleState(.freeText)
     }
-    
+
     @objc func spreadIndexDidChange(_ notification: Notification) {
           if let newSpreadIndex = notification.userInfo?["PSPDFDocumentViewControllerSpreadIndexKey"] as? Int,
             let newPageIndex = self.pdfViewController?.documentViewController?.layout.pageRangeForSpread(at: newSpreadIndex).location {

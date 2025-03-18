@@ -1,5 +1,5 @@
 ///
-///  Copyright © 2024 PSPDFKit GmbH. All rights reserved.
+///  Copyright 2024-2025 PSPDFKit GmbH. All rights reserved.
 ///
 ///  THIS SOURCE CODE AND ANY ACCOMPANYING DOCUMENTATION ARE PROTECTED BY INTERNATIONAL COPYRIGHT LAW
 ///  AND MAY NOT BE RESOLD OR REDISTRIBUTED. USAGE IS BOUND TO THE PSPDFKIT LICENSE AGREEMENT.
@@ -28,6 +28,7 @@ import 'package:pspdfkit_example/pspdfkit_instant_collaboration_example.dart';
 import 'package:pspdfkit_example/pspdfkit_measurement_tools.dart';
 import 'package:pspdfkit_example/pspdfkit_pdf_generation_example.dart';
 import 'package:pspdfkit_example/pspdfkit_save_as_example.dart';
+import 'package:pspdfkit_example/nutrient_annotation_flags.dart';
 
 import 'package:pspdfkit_flutter/pspdfkit.dart';
 
@@ -38,6 +39,7 @@ import 'pspdfkit_annotations_example.dart';
 import 'pspdfkit_manual_save_example.dart';
 import 'pspdfkit_annotation_processing_example.dart';
 import 'pspdfkit_password_example.dart';
+import 'nutrient_annotation_creation_mode_example.dart';
 
 const String _documentPath = 'PDFs/PSPDFKit.pdf';
 const String _measurementsDocs = 'PDFs/Measurements.pdf';
@@ -105,6 +107,11 @@ List<PspdfkitExampleItem> examples(BuildContext context) => [
         description:
             'Programmatically adds and removes annotations using a custom Widget.',
         onTap: () => annotationsExample(context),
+      ),
+      PspdfkitExampleItem(
+        title: 'Annotation Flags Example',
+        description: 'Shows how to click an annotation and modify its flags.',
+        onTap: () => annotationFlagsExample(context),
       ),
       if (!kIsWeb)
         PspdfkitExampleItem(
@@ -195,6 +202,15 @@ List<PspdfkitExampleItem> examples(BuildContext context) => [
             await extractAsset(context, _documentPath).then((value) =>
                 goTo(PspdfkitZoomExample(documentPath: value.path), context));
           }),
+      PspdfkitExampleItem(
+          title: 'Annotation Creation Mode',
+          description: 'Shows how to use annotation creation mode.',
+          onTap: () async {
+            await extractAsset(context, _documentPath).then((value) => goTo(
+                NutrientAnnotationCreationModeExampleWidget(
+                    documentPath: value.path),
+                context));
+          })
     ];
 
 List<PspdfkitExampleItem> globalExamples(BuildContext context) => [
@@ -570,4 +586,11 @@ void showMeasurementExampleGlobal(BuildContext context) {
 void goTo(Widget widget, BuildContext context) {
   Navigator.push<dynamic>(
       context, MaterialPageRoute<dynamic>(builder: (context) => widget));
+}
+
+void annotationFlagsExample(BuildContext context) {
+  goTo(
+    const NutrientAnnotationFlagsExample(),
+    context,
+  );
 }
