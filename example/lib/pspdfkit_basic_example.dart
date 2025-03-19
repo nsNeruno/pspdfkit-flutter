@@ -62,7 +62,12 @@ class _PspdfkitBasicExampleState extends State<PspdfkitBasicExample> {
                     // You may notice the last annotation couldn't be undo-ed
                     // and subsequent redo attempts also not working anymore
                     //
-                    // controller.addEventListener(NutrientEvent.annotationsDeleted, (_) {},);
+                    controller.addEventListener(
+                      NutrientEvent.annotationsDeleted,
+                      (_) {
+                        print('Annotations deleted');
+                      },
+                    );
                   },
                 ))));
   }

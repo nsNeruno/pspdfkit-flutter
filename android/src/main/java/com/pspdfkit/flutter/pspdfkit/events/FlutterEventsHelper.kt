@@ -81,7 +81,7 @@ class FlutterEventsHelper(val eventCallbacks: NutrientEventsCallbacks? = null) {
                     override fun onAnnotationRemoved(annotation: Annotation) {
                         eventCallbacks?.onEvent(
                             NutrientEvent.ANNOTATIONS_DELETED,
-                            mapOf("annotation" to annotation.toInstantJson()),
+                            mapOf("deletedAnnotation" to annotation.name),
                         ) { }
                     }
 
