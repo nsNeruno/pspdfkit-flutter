@@ -59,6 +59,15 @@ List<PspdfkitExampleItem> examples(BuildContext context) => [
               goTo(PspdfkitBasicExample(documentPath: value.path), context));
         },
       ),
+      if (kIsWeb)
+        PspdfkitExampleItem(
+          title: 'Split Example (Web)',
+          description: 'Split and display one or more page(s) from an existing PDF',
+          onTap: () async {
+            await extractAsset(context, _documentPath).then((value) =>
+                goTo(PspdfkitSplitExample(documentPath: value.path), context));
+          },
+        ),
       if (!kIsWeb)
         PspdfkitExampleItem(
           title: 'Basic Example using Platform Style',
