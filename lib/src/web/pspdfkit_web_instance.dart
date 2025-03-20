@@ -482,6 +482,24 @@ class PspdfkitWebInstance {
     );
   }
 
+  /// See [PSPDFKit.Instance.html#exportPDFWithOperations](https://www.nutrient.io/api/web/PSPDFKit.Instance.html#exportPDFWithOperations)
+  Future<Uint8List> exportPdfWithOperations(PspdfkitWebDocumentOperation operation,) async {
+    var arrayBuffer = await promiseToFuture(
+      _pspdfkitInstance.callMethod(
+        'exportPDFWithOperations',
+        [
+          JsObject.jsify([operation.toMap(),],),
+        ],
+      ),
+    );
+    var uintList = JsObject(context['Uint8Array'], [arrayBuffer]);
+    JsArray jsArray = context['Array'].callMethod('from', [uintList]);
+    Uint8List bytes = Uint8List.fromList(List<int>.from(jsArray));
+    return bytes;
+  }
+
+
+
   /// Exports the current document as a raw PDF file.
   /// The [options] parameter is an optional [DocumentSaveOptions] object that specifies the export options.
   /// Returns a [Future] that completes with a [Uint8List] containing the exported PDF data.

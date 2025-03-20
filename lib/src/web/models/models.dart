@@ -8,6 +8,7 @@
 ///
 
 export 'pspdfkit_web_annotation_toolbar_item_type.dart';
+export 'pspdfkit_web_document_operation.dart';
 export 'pspdfkit_web_toolbar_item.dart';
 export 'pspdfkit_web_toolbar_item_type.dart';
 export 'pspdfkit_web_annotation_toolbar_item.dart';
