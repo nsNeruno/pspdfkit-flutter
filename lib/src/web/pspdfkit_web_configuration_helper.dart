@@ -29,7 +29,7 @@ class WebConfigurationHelper {
   ///
   /// Returns a [PSPDFKit.Configuration](https://www.nutrient.io/api/web/PSPDFKit.Configuration.html) JsObject.
   static JsObject populateWebConfiguration(
-    Element element,
+    Element? element,
     String documentPath,
     String? licenseKey,
     PdfConfiguration? configuration,
@@ -145,7 +145,8 @@ class WebConfigurationHelper {
       'document': documentPath,
       'licenseKey': licenseKey,
       'productId': flutterWebProductId,
-      'container': element,
+      if (element != null)
+        'container': element,
       'initialViewState': initialViewState,
       'password': configuration?.password,
       'editableAnnotationTypes': configuration?.editableAnnotationTypes,

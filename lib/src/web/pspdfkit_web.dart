@@ -71,7 +71,7 @@ class PSPDFKitWeb {
   ///
   /// // Use the instance to interact with the document.
   /// ```
-  static Future<PspdfkitWebInstance> load(String documentPath, Element element,
+  static Future<PspdfkitWebInstance> load(String documentPath, Element? element,
       PdfConfiguration? configuration) async {
     var webConfiguration = WebConfigurationHelper.populateWebConfiguration(
       element,
