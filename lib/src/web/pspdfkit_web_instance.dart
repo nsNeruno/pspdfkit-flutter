@@ -748,4 +748,6 @@ class PspdfkitWebInstance {
     );
     await _pspdfkitInstance.callMethod('setViewState', [viewState,],);
   }
+
+  int get totalPageCount => _pspdfkitInstance['totalPageCount'];
 }
