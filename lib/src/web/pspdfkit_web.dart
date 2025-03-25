@@ -15,6 +15,8 @@ import 'package:pspdfkit_flutter/src/web/pspdfkit_web_configuration_helper.dart'
 import '../pdf_configuration.dart';
 import 'pspdfkit_web_utils.dart';
 
+export 'package:pspdfkit_flutter/src/web/pspdfkit_web_instance.dart';
+
 const flutterWebProductId = 'FlutterForWeb';
 
 /// Provides access to PSPDFKit for web.
