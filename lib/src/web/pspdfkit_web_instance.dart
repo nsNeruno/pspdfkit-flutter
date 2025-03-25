@@ -582,6 +582,38 @@ class PspdfkitWebInstance {
     }
   }
 
+  Future<Uint8List?> renderPageAsArrayBuffer({
+    int? width,
+    int? height,
+    int pageIndex = 0,
+  }) async {
+    if (width != null && height != null) {
+      throw ArgumentError('Only accepts either [width] or [height]',);
+    }
+    if (width == null && height == null) {
+      throw ArgumentError('At least [width] or [height] is required',);
+    }
+    final arrayBuffer = await promiseToFuture(
+      _pspdfkitInstance.callMethod(
+        'renderPageAsArrayBuffer',
+        [
+          JsObject.jsify(
+            {
+              if (width != null)
+                'width': width,
+              if (height != null)
+                'height': height,
+            },
+          ),
+          pageIndex,
+        ],
+      ),
+    );
+    final uintList = JsObject(context['Uint8Array'], [arrayBuffer]);
+    JsArray jsArray = context['Array'].callMethod('from', [uintList]);
+    return Uint8List.fromList(List<int>.from(jsArray,),);
+  }
+
   Future<String?> renderPageAsImageURL({
     int? width,
     int? height,
