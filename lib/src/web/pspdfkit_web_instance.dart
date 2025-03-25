@@ -582,6 +582,36 @@ class PspdfkitWebInstance {
     }
   }
 
+  Future<String?> renderPageAsImageURL({
+    int? width,
+    int? height,
+    int pageIndex = 0,
+  }) async {
+    if (width != null && height != null) {
+      throw ArgumentError('Only accepts either [width] or [height]',);
+    }
+    if (width == null && height == null) {
+      throw ArgumentError('At least [width] or [height] is required',);
+    }
+    final src = await promiseToFuture(
+      _pspdfkitInstance.callMethod(
+        'renderPageAsImageURL',
+        [
+          JsObject.jsify(
+            {
+              if (width != null)
+                'width': width,
+              if (height != null)
+                'height': height,
+            },
+          ),
+          pageIndex,
+        ],
+      ),
+    );
+    return src is String ? src : null;
+  }
+
   String _getFormFieldType(JsObject field) {
     JsObject textClass = context['PSPDFKit']['FormFields']['TextFormField'];
     JsObject signatureClass =
