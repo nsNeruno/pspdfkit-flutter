@@ -2338,6 +2338,7 @@ interface PdfDocumentApi {
   fun importXfdf(xfdfString: String, callback: (Result<Boolean>) -> Unit)
   /** Exports annotations to the XFDF file at the given path. */
   fun exportXfdf(xfdfPath: String, callback: (Result<Boolean>) -> Unit)
+  fun generateThumbnail(pageIndex: Long, width: Long, height: Long, callback: (Result<ByteArray?>) -> Unit)
   /**
    * Saves the document back to its original location if it has been changed.
    * If there were no changes to the document, the document file will not be modified.
@@ -2639,6 +2640,28 @@ interface PdfDocumentApi {
             val args = message as List<Any?>
             val xfdfPathArg = args[0] as String
             api.exportXfdf(xfdfPathArg) { result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.pspdfkit_flutter.PdfDocumentApi.generateThumbnail$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val pageIndexArg = args[0] as Long
+            val widthArg = args[1] as Long
+            val heightArg = args[2] as Long
+            api.generateThumbnail(pageIndexArg, widthArg, heightArg) { result: Result<ByteArray?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

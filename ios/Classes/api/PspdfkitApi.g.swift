@@ -2190,6 +2190,7 @@ protocol PdfDocumentApi {
   func importXfdf(xfdfString: String, completion: @escaping (Result<Bool, Error>) -> Void)
   /// Exports annotations to the XFDF file at the given path.
   func exportXfdf(xfdfPath: String, completion: @escaping (Result<Bool, Error>) -> Void)
+  func generateThumbnail(pageIndex: Int64, width: Int64, height: Int64, completion: @escaping (Result<FlutterStandardTypedData?, Error>) -> Void)
   /// Saves the document back to its original location if it has been changed.
   /// If there were no changes to the document, the document file will not be modified.
   func save(outputPath: String?, options: DocumentSaveOptions?, completion: @escaping (Result<Bool, Error>) -> Void)
@@ -2474,6 +2475,25 @@ class PdfDocumentApiSetup {
       }
     } else {
       exportXfdfChannel.setMessageHandler(nil)
+    }
+    let generateThumbnailChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.pspdfkit_flutter.PdfDocumentApi.generateThumbnail\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      generateThumbnailChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let pageIndexArg = args[0] as! Int64
+        let widthArg = args[1] as! Int64
+        let heightArg = args[2] as! Int64
+        api.generateThumbnail(pageIndex: pageIndexArg, width: widthArg, height: heightArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      generateThumbnailChannel.setMessageHandler(nil)
     }
     /// Saves the document back to its original location if it has been changed.
     /// If there were no changes to the document, the document file will not be modified.

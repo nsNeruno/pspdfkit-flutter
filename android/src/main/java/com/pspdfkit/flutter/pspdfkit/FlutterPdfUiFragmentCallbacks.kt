@@ -41,6 +41,7 @@ import io.flutter.plugin.common.MethodChannel
  * @param flutterWidgetCallback The callback to notify the Flutter side about document loading events.
  */
 class FlutterPdfUiFragmentCallbacks(
+    private val context: Context,
     private val methodChannel: MethodChannel, private val measurementConfigurations:
     List<Map<String, Any>>?,
     private val binaryMessenger: BinaryMessenger,
@@ -79,7 +80,7 @@ class FlutterPdfUiFragmentCallbacks(
         )
         flutterWidgetCallback.onDocumentLoaded(document)
         flutterPdfDocument =
-            FlutterPdfDocument(document);
+            FlutterPdfDocument(context, document);
         PdfDocumentApi.setUp(binaryMessenger, flutterPdfDocument, document.uid)
     }
 

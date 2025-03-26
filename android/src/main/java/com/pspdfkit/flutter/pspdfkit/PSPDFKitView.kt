@@ -109,7 +109,13 @@ internal class PSPDFKitView(
             }
         }
 
-        fragmentCallbacks = FlutterPdfUiFragmentCallbacks(methodChannel, measurementValueConfigurations, messenger,FlutterWidgetCallback(widgetCallbacks))
+        fragmentCallbacks = FlutterPdfUiFragmentCallbacks(
+            context,
+            methodChannel,
+            measurementValueConfigurations,
+            messenger,
+            FlutterWidgetCallback(widgetCallbacks)
+        )
 
         fragmentCallbacks?.let {
             getFragmentActivity(context).supportFragmentManager.registerFragmentLifecycleCallbacks(it, true)

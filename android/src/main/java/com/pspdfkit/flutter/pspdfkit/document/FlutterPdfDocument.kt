@@ -9,6 +9,9 @@
 
 package com.pspdfkit.flutter.pspdfkit.document
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import com.pspdfkit.annotations.Annotation
 import com.pspdfkit.document.PdfDocument
@@ -31,6 +34,11 @@ import com.pspdfkit.forms.TextFormElement
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -39,6 +47,7 @@ import java.nio.charset.StandardCharsets
 import java.util.EnumSet
 
 class FlutterPdfDocument(
+    private val context: Context,
     private val pdfDocument: PdfDocument
 ) : PdfDocumentApi {
 
@@ -504,6 +513,47 @@ class FlutterPdfDocument(
                     )
                 }
             )
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    @SuppressLint("CheckResult")
+    override fun generateThumbnail(
+        pageIndex: Long,
+        width: Long,
+        height: Long,
+        callback: (Result<ByteArray?>) -> Unit
+    ) {
+        try {
+            pdfDocument.renderPageToBitmapAsync(
+                context,
+                pageIndex.toInt(),
+                width.toInt(), height.toInt()
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { bitmap, throwable ->
+                if (throwable != null) {
+                    callback(Result.failure(throwable))
+                } else {
+                    if (bitmap == null) {
+                        callback(Result.success(null))
+                        return@subscribe
+                    }
+                    GlobalScope.launch(Dispatchers.IO) {
+                        with (ByteArrayOutputStream()) {
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, this)
+
+                            withContext(Dispatchers.Main) {
+                                callback(Result.success(toByteArray()))
+                            }
+                            close()
+                        }
+                    }
+                }
+            }
+        } catch (ex: Exception) {
+            callback(Result.failure(ex))
+        }
     }
 
     override fun save(
