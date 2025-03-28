@@ -826,7 +826,7 @@ class PspdfkitWebInstance {
         'setViewState',
         [
           allowInterop(
-            (JsObject viewState) {
+            (viewState) {
               return viewState.callMethod('zoomIn',);
             },
           ),
@@ -841,7 +841,7 @@ class PspdfkitWebInstance {
         'setViewState',
         [
           allowInterop(
-            (JsObject viewState) {
+            (viewState) {
               return viewState.callMethod('zoomOut',);
             },
           ),
@@ -857,7 +857,7 @@ class PspdfkitWebInstance {
         'setViewState',
         [
           allowInterop(
-            (JsObject viewState) {
+            (viewState) {
               return viewState.callMethod('set', ['zoomStep', step,],);
             },
           ),
