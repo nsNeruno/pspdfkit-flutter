@@ -803,12 +803,75 @@ class PspdfkitWebInstance {
   }
 
   Future<void> setInteractionMode(String? mode,) async {
-    var viewState = this.viewState;
-    viewState = await viewState.callMethod(
-      'set',
-      [ 'interactionMode', mode != null ? _interactionMode[mode] : null,],
+    await promiseToFuture(
+      _pspdfkitInstance.callMethod(
+        'setViewState',
+        [
+          allowInterop(
+            (viewState) {
+              return viewState.callMethod(
+                'set',
+                ['interactionMode', mode != null ? _interactionMode[mode] : null,],
+              );
+            },
+          ),
+        ],
+      ),
     );
-    await _pspdfkitInstance.callMethod('setViewState', [viewState,],);
+  }
+
+  Future<void> zoomIn() async {
+    await promiseToFuture(
+      _pspdfkitInstance.callMethod(
+        'setViewState',
+        [
+          allowInterop(
+            (JsObject viewState) {
+              return viewState.callMethod('zoomIn',);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> zoomOut() async {
+    await promiseToFuture(
+      _pspdfkitInstance.callMethod(
+        'setViewState',
+        [
+          allowInterop(
+            (JsObject viewState) {
+              return viewState.callMethod('zoomOut',);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> setZoomStep(double step,) async {
+    step = step.clamp(1.0, 3.0,);
+    await promiseToFuture(
+      _pspdfkitInstance.callMethod(
+        'setViewState',
+        [
+          allowInterop(
+            (JsObject viewState) {
+              return viewState.callMethod('set', ['zoomStep', step,],);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<double> get zoomStep async {
+    final viewState = _pspdfkitInstance['viewState'];
+    if (viewState is JsObject) {
+      return viewState['zoomStep'];
+    }
+    return 1.25;
   }
 
   int get totalPageCount => _pspdfkitInstance['totalPageCount'];

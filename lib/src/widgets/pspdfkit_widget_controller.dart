@@ -101,6 +101,10 @@ abstract class PspdfkitWidgetController {
   /// Returns a [Future] that completes with the zoom scale of the given page.
   Future<double> getZoomScale(int pageIndex);
 
+  Future<void> zoomIn();
+
+  Future<void> zoomOut();
+
   /// Enters annotation creation mode.
   ///
   /// If [annotationTool] is provided, that specific tool will be activated.

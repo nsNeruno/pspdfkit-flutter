@@ -253,6 +253,16 @@ class PspdfkitWidgetControllerWeb extends PspdfkitWidgetController
   }
 
   @override
+  Future<void> zoomIn() async {
+    await pspdfkitInstance.zoomIn();
+  }
+
+  @override
+  Future<void> zoomOut() async {
+    await pspdfkitInstance.zoomOut();
+  }
+
+  @override
   Future<bool> canUndo() {
     return pspdfkitInstance.canUndo();
   }

@@ -88,6 +88,12 @@ class PspdfkitFlutterWidgetControllerImpl
   }
 
   @override
+  Future<void> zoomIn() async {}
+
+  @override
+  Future<void> zoomOut() async {}
+
+  @override
   Future<bool?> importXfdf(String xfdfPath) {
     return _pspdfkitWidgetControllerApi.importXfdf(xfdfPath);
   }
