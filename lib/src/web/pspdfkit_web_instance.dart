@@ -821,32 +821,28 @@ class PspdfkitWebInstance {
   }
 
   Future<void> zoomIn() async {
-    await promiseToFuture(
-      _pspdfkitInstance.callMethod(
-        'setViewState',
-        [
-          allowInterop(
-            (viewState) {
-              return viewState.callMethod('zoomIn',);
-            },
-          ),
-        ],
-      ),
+    await _pspdfkitInstance.callMethod(
+      'setViewState',
+      [
+        allowInterop(
+          (viewState) {
+            return viewState.callMethod('zoomIn',);
+          },
+        ),
+      ],
     );
   }
 
   Future<void> zoomOut() async {
-    await promiseToFuture(
-      _pspdfkitInstance.callMethod(
-        'setViewState',
-        [
-          allowInterop(
-            (viewState) {
-              return viewState.callMethod('zoomOut',);
-            },
-          ),
-        ],
-      ),
+    await _pspdfkitInstance.callMethod(
+      'setViewState',
+      [
+        allowInterop(
+          (viewState) {
+            return viewState.callMethod('zoomOut',);
+          },
+        ),
+      ],
     );
   }
 
