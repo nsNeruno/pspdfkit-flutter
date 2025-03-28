@@ -187,6 +187,9 @@ class PspdfkitWidgetControllerNative extends PspdfkitWidgetController {
   Future<void> zoomOut() async {}
 
   @override
+  Future<void> setZoomScale(double scale) async {}
+
+  @override
   Future<bool?> enterAnnotationCreationMode(
       [AnnotationTool? annotationTool]) async {
     throw UnimplementedError(

@@ -105,6 +105,8 @@ abstract class PspdfkitWidgetController {
 
   Future<void> zoomOut();
 
+  Future<void> setZoomScale(double scale,);
+
   /// Enters annotation creation mode.
   ///
   /// If [annotationTool] is provided, that specific tool will be activated.

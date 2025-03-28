@@ -263,6 +263,11 @@ class PspdfkitWidgetControllerWeb extends PspdfkitWidgetController
   }
 
   @override
+  Future<void> setZoomScale(double scale) async {
+    await pspdfkitInstance.setZoomStep(scale,);
+  }
+
+  @override
   Future<bool> canUndo() {
     return pspdfkitInstance.canUndo();
   }

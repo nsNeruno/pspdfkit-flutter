@@ -94,6 +94,9 @@ class PspdfkitFlutterWidgetControllerImpl
   Future<void> zoomOut() async {}
 
   @override
+  Future<void> setZoomScale(double scale) async {}
+
+  @override
   Future<bool?> importXfdf(String xfdfPath) {
     return _pspdfkitWidgetControllerApi.importXfdf(xfdfPath);
   }
