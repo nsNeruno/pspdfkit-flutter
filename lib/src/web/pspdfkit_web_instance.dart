@@ -852,17 +852,15 @@ class PspdfkitWebInstance {
 
   Future<void> setZoomStep(double step,) async {
     step = step.clamp(1.0, 3.0,);
-    await promiseToFuture(
-      _pspdfkitInstance.callMethod(
-        'setViewState',
-        [
-          allowInterop(
-            (viewState) {
-              return viewState.callMethod('set', ['zoomStep', step,],);
-            },
-          ),
-        ],
-      ),
+    await _pspdfkitInstance.callMethod(
+      'setViewState',
+      [
+        allowInterop(
+          (viewState) {
+            return viewState.callMethod('set', ['zoomStep', step,],);
+          },
+        ),
+      ],
     );
   }
 
