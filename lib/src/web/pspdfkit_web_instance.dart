@@ -803,20 +803,18 @@ class PspdfkitWebInstance {
   }
 
   Future<void> setInteractionMode(String? mode,) async {
-    await promiseToFuture(
-      _pspdfkitInstance.callMethod(
-        'setViewState',
-        [
-          allowInterop(
-            (viewState) {
-              return viewState.callMethod(
-                'set',
-                ['interactionMode', mode != null ? _interactionMode[mode] : null,],
-              );
-            },
-          ),
-        ],
-      ),
+    await _pspdfkitInstance.callMethod(
+      'setViewState',
+      [
+        allowInterop(
+          (viewState) {
+            return viewState.callMethod(
+              'set',
+              ['interactionMode', mode != null ? _interactionMode[mode] : null,],
+            );
+          },
+        ),
+      ],
     );
   }
 
