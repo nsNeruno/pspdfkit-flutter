@@ -28,9 +28,11 @@ void main() {
   // iosLicenseKey: "YOUR_FLUTTER_IOS_LICENSE_KEY_GOES_HERE",
   // webLicenseKey: "YOUR_FLUTTER_WEB_LICENSE_KEY_GOES_HERE");
   //
-  Pspdfkit.initialize();
-  Pspdfkit.enableAnalytics(true);
 
+  Pspdfkit.initialize();
+  if (!kIsWeb) {
+    Pspdfkit.enableAnalytics(true);
+  }
   Pspdfkit.analyticsEventsListener = (eventName, attributes) {
     if (kDebugMode) {
       print('Analytics event: $eventName with attributes: $attributes');

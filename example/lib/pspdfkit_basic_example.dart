@@ -99,10 +99,16 @@ class _PspdfkitSplitExampleState extends State<PspdfkitSplitExample> {
     final pageOneBytes = await instance.exportPdfWithOperations(
       const PspdfkitWebKeepPagesOperation(pageIndexes: {1,},),
     );
-    final pdfBlob = html.Blob(pageOneBytes, 'application/pdf',);
+
+    // Convert bytes to base64 string
+    final base64String = html.window.btoa(String.fromCharCodes(pageOneBytes));
+
+    // Create a data URL with base64 content
+    final documentData = 'data:application/pdf;base64,$base64String';
+
     setState(
       () {
-        splitBlobPath = html.Url.createObjectUrlFromBlob(pdfBlob,);
+        splitBlobPath = documentData;
       },
     );
   }
